@@ -3,26 +3,27 @@ import './App.css';
 const { useState, useEffect } = React;
 
 function App() {
-  // const text = document.getElementById("text").value;
-  // const [text, setText] = useState("なにわづに咲くやこの花冬ごもり今は春べと咲くやこの花");
+  colorlist.sort(() => Math.random() - 0.5);
+  data.sort(() => Math.random() - 0.5);
+
   const [counter, setCounter] = useState(0);
   const [counter2, setCounter2] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
-  colorlist.sort(() => Math.random() - 0.5);
-  data.sort(() => Math.random() - 0.5);
+
   const [bgcolor, setBGColor] = useState(colorlist[0]);
-  const [[upper, lower], setName] = useState([data.upper, data.lower]);
-  const delay: number = 2000;
+  const [[upper, lower, meaning], setName] = useState([data[0].upper, data[0].lower, data[0].meaning]);
+  const delay: number = 8000;
 
   document.documentElement.style.setProperty("--background", bgcolor);
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (isRunning) {
+        setName([data[counter2].upper, data[counter2].lower, data[counter2].meaning]);
+        readAloud(data[counter2].speech)
         setCounter((prevCount) => (prevCount + 1) % colorlist.length);
-        setCounter2((prevCount) => (prevCount + 1) % namelist.length);
+        setCounter2((prevCount) => (prevCount + 1) % data.length);
         setBGColor(colorlist[counter]);
-        setName(data[counter2]);
       }
     }, delay);
     return () => {
@@ -31,7 +32,7 @@ function App() {
   });
 
 
-  const readAloud = () => {
+  const readAloud = (text: string) => {
     const uttr = new SpeechSynthesisUtterance();
     uttr.text = text;
     window.speechSynthesis.speak(uttr);
@@ -40,18 +41,17 @@ function App() {
 
   return (
     <div className="App">
-      {/* <input className="text" value={text} onChange={(e) => handleChange(e)} />
-      <button onClick={() => readAloud()}>読み上げる</button> */}
-      <h1>{upper}</h1>
-      <h1>{lower}</h1>
-      <button onClick={() => setIsRunning(true)}>START</button>
-      <button
+      <h3 className="text">{upper}</h3>
+      <h3 className="text">{lower}</h3>
+      <button className="button" onClick={() => setIsRunning(true)}>START</button>
+      <button className="button"
         onClick={() => {
           setIsRunning(false);
         }}
       >
         STOP
       </button>
+      <h3 className="text">{meaning}</h3>
     </div >
   );
 }
@@ -229,7 +229,7 @@ const data = [
   },
   {
     id: 3,
-    speech: "ん。あしびきの山鳥の尾のしだり尾のながながし夜をひとりかもねん",
+    speech: "ん。あしびきの山鳥の尾のしだり尾のながながしよをひとりかもねん",
     upper: "あしびきのやまどりのをのしだりをの",
     lower: "がながしよをひとりかもねむ",
     meaning: "山鳥の垂れ尾ではないが、長い夜をひとり寂しく寝る",
@@ -246,7 +246,7 @@ const data = [
   },
   {
     id: 5,
-    speech: "ん。奥山にもみぢ踏わ分け鳴く鹿の声聞くときぞ秋は悲しき",
+    speech: "ん。奥山にもみぢふみ分け鳴く鹿の声聞くときぞ秋は悲しき",
     upper: "おくやまにもみぢふみわけなくしかの",
     lower: "こゑきくときぞあきはかなしき",
     meaning:
@@ -299,7 +299,7 @@ const data = [
   },
   {
     id: 11,
-    speech: "ん。わたの原やそしまかけて漕ぎいでぬと人にはつげよあまの釣舟",
+    speech: "ん。わたの原やそしまかけて漕ぎいでぬと人にはつげよあまの釣ぶね",
     upper: "わたのはらやそしまかけてこぎいでぬと",
     lower: "ひとにはつげよあまのつりぶね",
     meaning:
@@ -344,7 +344,7 @@ const data = [
   },
   {
     id: 16,
-    speech: "ん。立ち別れいなばの山の峰におうるまつとし聞かばいざ帰りこん",
+    speech: "ん。立ち別れいなばの山の峰におうるまつとし聞かばいま帰りこん",
     upper: "たちわかれいなぱのやまのみねにおふる",
     lower: "まつとしきかばいまかへりこむ",
     meaning:
@@ -353,7 +353,7 @@ const data = [
   },
   {
     id: 17,
-    speech: "ん。ちはやふる神代も聞かず竜田川からくれないに水くくるとは",
+    speech: "ん。ちはやぶる神代も聞かずたつたがわからくれないに水くくるとは",
     upper: "ちはやぶるかみよもきかずたつたがは",
     lower: "からくれなゐにみづくくるとは",
     meaning:
@@ -371,7 +371,7 @@ const data = [
   },
   {
     id: 19,
-    speech: "ん。なにはがた短きあしのふしのまもあわでこの世をすごしてよとや",
+    speech: "ん。なにはがた短きあしのふしのまもあわでこの世をすぐしてよとや",
     upper: "なにはがたみじかきあしのふしのまも",
     lower: "あはでこのよをすぐしてよとや",
     meaning:
@@ -513,7 +513,7 @@ const data = [
   },
   {
     id: 35,
-    speech: "ん。ひとははいさ心も知らずふる里は花ぞ昔のかににおいける",
+    speech: "ん。ひとわいさ心も知らずふる里は花ぞ昔のかににおいける",
     upper: "ひとはいさこころもしらずふるさとは",
     lower: "はなぞむかしのかににほひける",
     meaning:
@@ -557,7 +557,7 @@ const data = [
   },
   {
     id: 40,
-    speech: "ん。忍ぶれど色にいでにけりわが恋はものや恩うと人の問うまで",
+    speech: "ん。忍ぶれど色にいでにけりわが恋はものやおもうと人の問うまで",
     upper: "しのぶれどいろにいでにけりわがこひは",
     lower: "ものやおもふとひとのとふまで",
     meaning:
@@ -664,7 +664,7 @@ const data = [
   },
   {
     id: 52,
-    speech: "ん。明けぬればくるるものとは知りながらなお恨めしき朝ぼらけかな",
+    speech: "ん。明けぬればくるるものとは知りながらなおうらめしき朝ぼらけかな",
     upper: "あけぬればくるるものとはしりながら",
     lower: "なほうらめしきあさぼらけかな",
     meaning:
@@ -950,7 +950,7 @@ const data = [
   },
   {
     id: 84,
-    speech: "ん。ながらえばまたこの頃やしのばれんうしとみし世ぞ今は恋しき",
+    speech: "ん。ながらえばまたこのごろやしのばれんうしとみし世ぞ今は恋しき",
     upper: "ながらへばまたこのごろやしのばれむ",
     lower: "うしとみしよぞいまはこひしき",
     meaning:
@@ -1032,7 +1032,7 @@ const data = [
   },
   {
     id: 93,
-    speech: "ん。世の中は常にもがもななぎさ漕ぐあまのおぶねの綱手かなしも",
+    speech: "ん。世の中は常にもがもななぎさ漕ぐあまのおぶねのつなでかなしも",
     upper: "よのなかはつねにもがもななぎさこぐ",
     lower: "あまのをぶねのつなでかなしも",
     meaning:
@@ -1084,7 +1084,7 @@ const data = [
   },
   {
     id: 99,
-    speech: "ん。人も惜し人も恨めしあぢきなく世を思うゆえにもの思ふ身は",
+    speech: "ん。人も惜し人も恨めしあぢきなく世を思うゆえにもの思う身は",
     upper: "ひともをしひともうらめしあぢきなく",
     lower: "よをおもふゆゑにものおもふみは",
     meaning: "人が愛しく､また恨めしく、世を歎くから、もの思いをする自分がある",
